@@ -1,33 +1,71 @@
-import { useEffect, useRef, useState } from "react";
-import { Group, Mesh, Vector3 } from "three";
-import { Canvas, useFrame } from "@react-three/fiber";
-import { OrbitControls, Text } from "@react-three/drei";
+import { useEffect, useRef, useState } from 'react';
+import { BufferGeometry, Group, Mesh, Vector3 } from 'three';
+import { Canvas, ThreeEvent, useFrame } from '@react-three/fiber';
+import { Line, OrbitControls, Text } from '@react-three/drei';
+
+import { SphereDataType } from '@src/type';
 
 const Example = () => {
   const [cameraIndex, setCameraIndex] = useState(0);
-  const dummyData: number[][] = [
-    [2, 2, 2],
-    [3, 10, 3],
-    [-15, 5, 7],
-    [-10, -8, -3],
-    [7, -3, 10],
-    [11, 7, -5],
+  const dummyData: SphereDataType[] = [
+    {
+      id: 1,
+      coord: [2, 2, 2],
+    },
+    {
+      id: 2,
+      coord: [3, 10, 3],
+      parentId: 1,
+    },
+    {
+      id: 3,
+      coord: [-15, 5, 7],
+      parentId: 1,
+    },
+    {
+      id: 4,
+      coord: [-10, -8, -3],
+      parentId: 1,
+    },
+    {
+      id: 5,
+      coord: [7, -3, 10],
+      parentId: 1,
+    },
+    {
+      id: 6,
+      coord: [11, 7, -5],
+      parentId: 1,
+    },
   ];
+
+  const onClickGroup = (e: ThreeEvent<MouseEvent>, index: number) => {
+    e.stopPropagation();
+    setCameraIndex(index);
+  };
 
   return (
     <Canvas>
       <OrbitControls
         minDistance={10}
         maxDistance={100000}
-        target={new Vector3(...dummyData[cameraIndex])}
+        target={new Vector3(...dummyData[cameraIndex].coord)}
       />
-      {dummyData.map((group, index: number) => (
-        <SphereGroup
-          position={new Vector3(...group)}
-          isActive={index === cameraIndex}
-          onClickGroup={() => setCameraIndex(index)}
-        />
-      ))}
+      {dummyData.map((group: SphereDataType, index: number) => {
+        const parentItem = dummyData.find((item) => item.id === group.parentId);
+
+        return (
+          <SphereGroup
+            key={group.id}
+            position={new Vector3(...group.coord)}
+            parentPosition={
+              parentItem ? new Vector3(...parentItem.coord) : undefined
+            }
+            isActive={index === cameraIndex}
+            onClickGroup={(e: ThreeEvent<MouseEvent>) => onClickGroup(e, index)}
+          />
+        );
+      })}
       {/* <gridHelper /> */}
     </Canvas>
   );
@@ -35,12 +73,24 @@ const Example = () => {
 
 const SphereGroup = (props: {
   position: Vector3;
+  parentPosition: Vector3 | undefined;
   isActive: boolean;
-  onClickGroup: () => void;
+  onClickGroup: (e: ThreeEvent<MouseEvent>) => void;
 }) => {
-  const { position, isActive, onClickGroup } = props;
+  const { position, parentPosition, isActive, onClickGroup } = props;
+  const lineRef = useRef<BufferGeometry>(null);
   const sphereRef = useRef<Group>(null);
-  const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZVWXYZ";
+  const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZVWXYZ';
+
+  useEffect(() => {
+    if (parentPosition) {
+      const points = [];
+      points.push(position);
+      points.push(parentPosition);
+
+      lineRef.current?.setFromPoints(points);
+    }
+  }, []);
 
   useFrame(() => {
     if (sphereRef.current) {
@@ -49,29 +99,35 @@ const SphereGroup = (props: {
   });
 
   return (
-    <group ref={sphereRef} position={position} onClick={onClickGroup}>
-      <mesh>
-        <sphereGeometry args={[3.5, 15, 15]} />
-        <meshBasicMaterial
-          transparent
-          opacity={0.1}
-          color={isActive ? "red" : "blue"}
-          depthTest={false}
-        />
-      </mesh>
-      {alphabet.split("").map((alp, index: number, list: string[]) => {
-        const phi = Math.acos(-1 + (2 * index) / list.length);
-        const theta = Math.sqrt(list.length * Math.PI) * phi;
-
-        return (
-          <BoxMesh
-            text={alp}
-            position={new Vector3().setFromSphericalCoords(3, phi, theta)}
-            groupPosition={position}
+    <>
+      <group ref={sphereRef} position={position} onClick={onClickGroup}>
+        <mesh>
+          <sphereGeometry args={[3.5, 15, 15]} />
+          <meshBasicMaterial
+            transparent
+            opacity={0.1}
+            color={isActive ? 'red' : 'blue'}
+            depthTest={false}
           />
-        );
-      })}
-    </group>
+        </mesh>
+        {alphabet.split('').map((alp, index: number, list: string[]) => {
+          const phi = Math.acos(-1 + (2 * index) / list.length);
+          const theta = Math.sqrt(list.length * Math.PI) * phi;
+
+          return (
+            <BoxMesh
+              key={`${alp}-${index}`}
+              text={alp}
+              position={new Vector3().setFromSphericalCoords(3, phi, theta)}
+              groupPosition={position}
+            />
+          );
+        })}
+      </group>
+      {parentPosition && (
+        <Line points={[position, parentPosition]} lineWidth={5} color="red" />
+      )}
+    </>
   );
 };
 
