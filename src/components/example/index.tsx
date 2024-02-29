@@ -4,40 +4,10 @@ import { Canvas, ThreeEvent, useFrame } from '@react-three/fiber';
 import { Line, OrbitControls, Text } from '@react-three/drei';
 
 import { SphereDataType } from '@src/type';
+import { sphereData } from '@src/data';
 
 const Example = () => {
   const [cameraIndex, setCameraIndex] = useState(0);
-  const dummyData: SphereDataType[] = [
-    {
-      id: 1,
-      coord: [2, 2, 2],
-    },
-    {
-      id: 2,
-      coord: [3, 10, 3],
-      parentId: 1,
-    },
-    {
-      id: 3,
-      coord: [-15, 5, 7],
-      parentId: 1,
-    },
-    {
-      id: 4,
-      coord: [-10, -8, -3],
-      parentId: 1,
-    },
-    {
-      id: 5,
-      coord: [7, -3, 10],
-      parentId: 1,
-    },
-    {
-      id: 6,
-      coord: [11, 7, -5],
-      parentId: 1,
-    },
-  ];
 
   const onClickGroup = (e: ThreeEvent<MouseEvent>, index: number) => {
     e.stopPropagation();
@@ -49,10 +19,12 @@ const Example = () => {
       <OrbitControls
         minDistance={10}
         maxDistance={100000}
-        target={new Vector3(...dummyData[cameraIndex].coord)}
+        target={new Vector3(...sphereData[cameraIndex].coord)}
       />
-      {dummyData.map((group: SphereDataType, index: number) => {
-        const parentItem = dummyData.find((item) => item.id === group.parentId);
+      {sphereData.map((group: SphereDataType, index: number) => {
+        const parentItem = sphereData.find(
+          (item) => item.id === group.parentId
+        );
 
         return (
           <SphereGroup
@@ -94,7 +66,7 @@ const SphereGroup = (props: {
 
   useFrame(() => {
     if (sphereRef.current) {
-      sphereRef.current.rotation.y += 0.01;
+      // sphereRef.current.rotation.y += 0.01;
     }
   });
 
