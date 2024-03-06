@@ -6,17 +6,22 @@ import { Line, OrbitControls, Text } from '@react-three/drei';
 import { SphereDataType } from '@src/type';
 import { sphereData } from '@src/data';
 
+import type { OrbitControls as OrbitControlsImpl } from 'three-stdlib';
+
 const Example = () => {
+  const cameraRef = useRef<OrbitControlsImpl>(null);
   const [cameraIndex, setCameraIndex] = useState(0);
 
   const onClickGroup = (e: ThreeEvent<MouseEvent>, index: number) => {
     e.stopPropagation();
+
     setCameraIndex(index);
   };
 
   return (
     <Canvas>
       <OrbitControls
+        ref={cameraRef}
         minDistance={10}
         maxDistance={100000}
         target={new Vector3(...sphereData[cameraIndex].coord)}
@@ -66,7 +71,7 @@ const SphereGroup = (props: {
 
   useFrame(() => {
     if (sphereRef.current) {
-      // sphereRef.current.rotation.y += 0.01;
+      sphereRef.current.rotation.y += 0.02;
     }
   });
 
