@@ -1,22 +1,40 @@
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useEffect } from 'react';
+import { useRecoilState } from 'recoil';
 import { BufferGeometry, Group, Mesh, Vector3 } from 'three';
 import { Canvas, ThreeEvent } from '@react-three/fiber';
 import { Line, OrbitControls, Text } from '@react-three/drei';
+import { groupIdState } from '@src/store/example2';
 
 import { SphereDataType } from '@src/type';
-import { sphereData } from '@src/data';
 
 import type { OrbitControls as OrbitControlsImpl } from 'three-stdlib';
 
-const Example = () => {
+const testData = [
+  {
+    id: 1,
+    coord: [15, 75, -30],
+  },
+  {
+    id: 2,
+    coord: [100, 25, -15],
+    parentId: 1,
+  },
+  {
+    id: 3,
+    coord: [-25, 50, 50],
+    parentId: 1,
+  },
+];
+
+const Example2 = () => {
   const cameraRef = useRef<OrbitControlsImpl>(null);
-  const [cameraIndex, setCameraIndex] = useState(0);
+  const [groupId, setGroupId] = useRecoilState(groupIdState);
 
-  const onClickGroup = (e: ThreeEvent<MouseEvent>, index: number) => {
-    e.stopPropagation();
+  useEffect(() => {
+    setGroupId(testData[0].id);
+  }, []);
 
-    setCameraIndex(index);
-  };
+  const selectItem = testData.find((item) => item.id === groupId);
 
   return (
     <Canvas>
@@ -24,39 +42,35 @@ const Example = () => {
         ref={cameraRef}
         minDistance={10}
         maxDistance={100000}
-        target={new Vector3(...sphereData[cameraIndex].coord)}
+        target={selectItem ? new Vector3(...selectItem.coord) : undefined}
       />
-      {sphereData.map((group: SphereDataType, index: number) => {
-        const parentItem = sphereData.find(
-          (item) => item.id === group.parentId
-        );
+      {testData.map((group: SphereDataType) => {
+        const parentItem = testData.find((item) => item.id === group.parentId);
 
         return (
           <SphereGroup
             key={group.id}
+            data={group}
             position={new Vector3(...group.coord)}
             parentPosition={
               parentItem ? new Vector3(...parentItem.coord) : undefined
             }
-            isActive={index === cameraIndex}
-            onClickGroup={(e: ThreeEvent<MouseEvent>) => onClickGroup(e, index)}
           />
         );
       })}
-      {/* <gridHelper /> */}
     </Canvas>
   );
 };
 
 const SphereGroup = (props: {
+  data: SphereDataType;
   position: Vector3;
   parentPosition: Vector3 | undefined;
-  isActive: boolean;
-  onClickGroup: (e: ThreeEvent<MouseEvent>) => void;
 }) => {
-  const { position, parentPosition, isActive, onClickGroup } = props;
+  const { data, position, parentPosition } = props;
   const lineRef = useRef<BufferGeometry>(null);
   const sphereRef = useRef<Group>(null);
+  const [groupId, setGroupId] = useRecoilState(groupIdState);
   const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZVWXYZ';
 
   useEffect(() => {
@@ -69,15 +83,25 @@ const SphereGroup = (props: {
     }
   }, []);
 
+  const onClickGroup = (e: ThreeEvent<MouseEvent>) => {
+    setGroupId(Number(e.eventObject.name));
+  };
+
   return (
     <>
-      <group ref={sphereRef} position={position} onClick={onClickGroup}>
+      <group
+        ref={sphereRef}
+        name={`${data.id}`}
+        position={position}
+        onClick={onClickGroup}
+        renderOrder={2}
+      >
         <mesh>
-          <sphereGeometry args={[3.5, 15, 15]} />
+          <sphereGeometry args={[20, 15, 15]} />
           <meshBasicMaterial
             transparent
             opacity={0.3}
-            color={isActive ? 'red' : 'white'}
+            color={groupId === data.id ? 'red' : 'white'}
             depthTest={false}
           />
         </mesh>
@@ -89,7 +113,11 @@ const SphereGroup = (props: {
             <BoxMesh
               key={`${alp}-${index}`}
               text={alp}
-              position={new Vector3().setFromSphericalCoords(3, phi, theta)}
+              position={new Vector3().setFromSphericalCoords(
+                Math.ceil(list.length / 4),
+                phi,
+                theta
+              )}
               groupPosition={position}
             />
           );
@@ -99,7 +127,18 @@ const SphereGroup = (props: {
         <Line
           points={[position, parentPosition]}
           lineWidth={5}
-          color="#DBDBDB"
+          color={data.parentId === groupId ? 'red' : '#DBDBDB'}
+          vertexColors={
+            data.parentId === groupId
+              ? [
+                  [0, 0, 0],
+                  [1, 23, 1],
+                ]
+              : [
+                  [255, 255, 255],
+                  [255, 255, 255],
+                ]
+          }
         />
       )}
     </>
@@ -113,6 +152,7 @@ const BoxMesh = (props: {
 }) => {
   const { text, position, groupPosition } = props;
   const boxRef = useRef<Mesh>(null);
+  //   const [nodeId, setNodeId] = useRecoilState(nodeIdState);
 
   useEffect(() => {
     if (boxRef.current) {
@@ -129,16 +169,27 @@ const BoxMesh = (props: {
     }
   }, []);
 
+  const onClickNode = (e: ThreeEvent<MouseEvent>) => {
+    console.log('ONCLICK!!', e);
+    // setNodeId(e.eventObject.name);
+  };
+
   return (
-    <mesh ref={boxRef} position={position}>
+    <mesh
+      ref={boxRef}
+      position={position}
+      onClick={onClickNode}
+      renderOrder={1}
+    >
       <ambientLight intensity={1} />
-      <boxGeometry args={[1, 1, 0]} />
-      <Text position={[0, 0, 0.01]} color="black" fontSize={0.5}>
+      <sphereGeometry args={[1, 15, 15]} />
+      <Text position={[0, 0, 1]} color="black" fontSize={1} renderOrder={1}>
         {text}
       </Text>
-      <meshBasicMaterial />
+      <meshBasicMaterial depthTest={false} transparent />
+      {/* <Outlines color="blue" scale={1.2} /> */}
     </mesh>
   );
 };
 
-export default Example;
+export default Example2;
