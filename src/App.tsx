@@ -4,7 +4,7 @@ import Example2 from './components/example2';
 
 const App = () => {
   return (
-    <div style={{ background: '#000' }}>
+    <div>
       {/* <Example /> */}
       <Example2 />
     </div>

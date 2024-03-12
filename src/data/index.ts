@@ -135,3 +135,35 @@ export const sphereData: SphereDataType[] = [
     parentId: 109,
   },
 ];
+
+export const sphereGroupData = [
+  {
+    id: 1,
+    coord: [15, 75, -30],
+  },
+  {
+    id: 2,
+    coord: [100, 25, -15],
+    parentId: 1,
+  },
+  {
+    id: 3,
+    coord: [-25, 50, 50],
+    parentId: 1,
+  },
+  {
+    id: 4,
+    coord: [-25, 100, 100],
+    parentId: 3,
+  },
+  {
+    id: 5,
+    coord: [-100, 25, 150],
+    parentId: 4,
+  },
+  {
+    id: 6,
+    coord: [0, 0, 200],
+    parentId: 4,
+  },
+];
