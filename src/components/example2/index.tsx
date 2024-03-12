@@ -1,13 +1,23 @@
+/* eslint-disable import/extensions */
 import { useRef, useEffect } from 'react';
 import { useRecoilState } from 'recoil';
-import { BufferGeometry, Group, Mesh, Vector3 } from 'three';
-import { Canvas, ThreeEvent } from '@react-three/fiber';
+import {
+  AdditiveBlending,
+  BufferGeometry,
+  Group,
+  Mesh,
+  MeshBasicMaterial,
+  Object3DEventMap,
+  SphereGeometry,
+  Vector3,
+} from 'three';
+import { Canvas, ThreeEvent, useFrame } from '@react-three/fiber';
 import { Line, OrbitControls, Text } from '@react-three/drei';
 import { groupIdState } from '@src/store/example2';
+import type { OrbitControls as OrbitControlsImpl } from 'three-stdlib';
+import { Line2 } from 'three/examples/jsm/Addons.js';
 
 import { SphereDataType } from '@src/type';
-
-import type { OrbitControls as OrbitControlsImpl } from 'three-stdlib';
 
 const testData = [
   {
@@ -124,22 +134,7 @@ const SphereGroup = (props: {
         })}
       </group>
       {parentPosition && (
-        <Line
-          points={[position, parentPosition]}
-          lineWidth={5}
-          color={data.parentId === groupId ? 'red' : '#DBDBDB'}
-          vertexColors={
-            data.parentId === groupId
-              ? [
-                  [0, 0, 0],
-                  [1, 23, 1],
-                ]
-              : [
-                  [255, 255, 255],
-                  [255, 255, 255],
-                ]
-          }
-        />
+        <TrackingLine position={position} parentPosition={parentPosition} />
       )}
     </>
   );
@@ -189,6 +184,57 @@ const BoxMesh = (props: {
       <meshBasicMaterial depthTest={false} transparent />
       {/* <Outlines color="blue" scale={1.2} /> */}
     </mesh>
+  );
+};
+
+const TrackingLine = (props: {
+  position: Vector3;
+  parentPosition: Vector3;
+}) => {
+  const { position, parentPosition } = props;
+  const lineRef = useRef<Line2>(null);
+  const groupRef = useRef<Group<Object3DEventMap>>(null);
+
+  useEffect(() => {
+    if (lineRef.current) {
+      const particle = new SphereGeometry(1, 32, 16);
+      const pMaterial = new MeshBasicMaterial({
+        color: 'red',
+        blending: AdditiveBlending,
+        transparent: true,
+      });
+
+      for (let i = 0; i <= 15; i++) {
+        const particlePosition = parentPosition.lerp(position, i / 15);
+        const mesh = new Mesh(particle, pMaterial);
+        mesh.position.set(
+          particlePosition.x,
+          particlePosition.y,
+          particlePosition.z
+        );
+
+        groupRef.current?.add(mesh);
+      }
+    }
+  }, []);
+
+  useFrame(() => {
+    groupRef.current?.children.forEach((item) => {
+      const path = item.position;
+
+      if (path.distanceTo(position) < 5) {
+        path.set(15, 75, -30);
+      }
+      const tranVector = new Vector3(position.x, position.y, position.z);
+      path.lerp(tranVector, 0.01);
+    });
+  });
+
+  return (
+    <>
+      <Line ref={lineRef} points={[position, parentPosition]} lineWidth={2} />
+      <group ref={groupRef} />
+    </>
   );
 };
 
