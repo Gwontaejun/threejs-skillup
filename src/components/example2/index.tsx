@@ -26,8 +26,7 @@ const Example2 = () => {
   return (
     <Canvas shadows>
       {/* <pointLight position={[0, 20, 10]} intensity={1.5} /> */}
-      {/* <ambientLight intensity={30} color="#red" /> */}
-
+      <ambientLight intensity={0.3} color="white" />
       <SkyboxWrapper />
       <EffectComposer>
         <Bloom mipmapBlur luminanceThreshold={1} radius={0.7} />
@@ -45,22 +44,12 @@ const SkyboxWrapper = () => {
 
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-expect-error
-  useHelper(lightRef, DirectionalLightHelper, 3, 'red');
+  useHelper(lightRef, DirectionalLightHelper, 5, 'red');
 
   useEffect(() => {
     setData(sphereGroupData);
     setGroupId(sphereGroupData[0].id);
     loadSkyBox();
-    if (lightRef.current) {
-      lightRef.current.shadow.mapSize.width = 1200; // Better readjust after changing directionalLight1.shadow.camera » top bottom left right
-      lightRef.current.shadow.mapSize.height = 1200; // Better readjust after changing directionalLight1.shadow.camera » top bottom left right
-      lightRef.current.shadow.camera.near = 0.1; // Near shadow casting distance
-      lightRef.current.shadow.camera.far = 100; // Far shadow casting distance
-      lightRef.current.shadow.camera.top = 11;
-      lightRef.current.shadow.camera.bottom = -11;
-      lightRef.current.shadow.camera.left = -11;
-      lightRef.current.shadow.camera.right = 11;
-    }
   }, []);
 
   const loadSkyBox = () => {
@@ -92,12 +81,10 @@ const SkyboxWrapper = () => {
       />
       <directionalLight
         ref={lightRef}
-        position={[200, 200, 200]}
+        position={[300, 450, 0]}
         intensity={1}
         castShadow
       />
-      <axesHelper />
-      <gridHelper />
       {data.map((group: SphereDataType) => {
         const parentItem = data.find((item) => item.id === group.parentId);
 
@@ -125,7 +112,7 @@ const SphereGroup = (props: {
   const lineRef = useRef<BufferGeometry>(null);
   const sphereRef = useRef<Group>(null);
   const [groupId, setGroupId] = useRecoilState(groupIdState);
-  const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZVWXYZ';
+  const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYABCDEFGHIJKLMNOPQRSTUVWXY';
 
   useEffect(() => {
     if (parentPosition) {
@@ -149,12 +136,14 @@ const SphereGroup = (props: {
         position={position}
         onClick={onClickGroup}
         renderOrder={2}
+        castShadow
+        receiveShadow
       >
-        <mesh>
-          <sphereGeometry args={[20, 15, 15]} />
-          <meshBasicMaterial
+        <mesh castShadow receiveShadow>
+          <sphereGeometry args={[alphabet.length / 2.5, 15, 15]} />
+          <meshStandardMaterial
             transparent
-            opacity={0.3}
+            opacity={0.9}
             color={groupId === data.id ? 'red' : 'white'}
             depthTest={false}
           />
@@ -168,7 +157,7 @@ const SphereGroup = (props: {
               key={`${alp}-${index}`}
               text={alp}
               position={new Vector3().setFromSphericalCoords(
-                Math.ceil(list.length / 4),
+                Math.ceil(list.length / (list.length / 15)),
                 phi,
                 theta
               )}
@@ -297,12 +286,15 @@ const BoxMesh = (props: {
       position={position}
       onClick={onClickNode}
       renderOrder={1}
+      castShadow
+      receiveShadow
     >
       <sphereGeometry args={[1, 15, 15]} />
       <Text position={[0, 0, 1]} color="black" fontSize={1} renderOrder={1}>
         {text}
       </Text>
-      <meshBasicMaterial depthTest={false} transparent />
+      {/* <meshStandardMaterial color="white" depthTest={false} transparent /> */}
+      <meshBasicMaterial color={[1, 1, 4]} depthTest={false} transparent />
     </mesh>
   );
 };
