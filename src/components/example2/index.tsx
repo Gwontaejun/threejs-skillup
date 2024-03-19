@@ -6,15 +6,14 @@ import {
   Color,
   CubeTextureLoader,
   DirectionalLight,
-  DirectionalLightHelper,
   Group,
   Mesh,
   Object3DEventMap,
   Vector3,
 } from 'three';
 import { Canvas, ThreeEvent, useFrame, useThree } from '@react-three/fiber';
-import { Line, OrbitControls, Text, Trail, useHelper } from '@react-three/drei';
-import { groupIdState } from '@src/store/example2';
+import { Line, OrbitControls, Text, Trail } from '@react-three/drei';
+import { groupIdState, nodeIdState } from '@src/store/example2';
 import type { OrbitControls as OrbitControlsImpl } from 'three-stdlib';
 import { Line2 } from 'three/examples/jsm/Addons.js';
 
@@ -41,10 +40,6 @@ const SkyboxWrapper = () => {
   const cameraRef = useRef<OrbitControlsImpl>(null);
   const [data, setData] = useState<SphereDataType[]>([]);
   const [groupId, setGroupId] = useRecoilState(groupIdState);
-
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-expect-error
-  useHelper(lightRef, DirectionalLightHelper, 5, 'red');
 
   useEffect(() => {
     setData(sphereGroupData);
@@ -112,7 +107,6 @@ const SphereGroup = (props: {
   const lineRef = useRef<BufferGeometry>(null);
   const sphereRef = useRef<Group>(null);
   const [groupId, setGroupId] = useRecoilState(groupIdState);
-  const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYABCDEFGHIJKLMNOPQRSTUVWXY';
 
   useEffect(() => {
     if (parentPosition) {
@@ -140,7 +134,10 @@ const SphereGroup = (props: {
         receiveShadow
       >
         <mesh castShadow receiveShadow>
-          <sphereGeometry args={[alphabet.length / 2.5, 15, 15]} />
+          <sphereGeometry args={[5, 15, 15]} />
+          <Text position={[0, 0, 0]} color="white" fontSize={2} renderOrder={1}>
+            TEAM
+          </Text>
           <meshStandardMaterial
             transparent
             opacity={0.9}
@@ -148,23 +145,30 @@ const SphereGroup = (props: {
             depthTest={false}
           />
         </mesh>
-        {alphabet.split('').map((alp, index: number, list: string[]) => {
-          const phi = Math.acos(-1 + (2 * index) / list.length);
-          const theta = Math.sqrt(list.length * Math.PI) * phi;
+        {data.child?.map(
+          (
+            item: { id: string; text: string },
+            index: number,
+            list: { id: string; text: string }[]
+          ) => {
+            const phi = Math.acos(-1 + (2 * index) / list.length);
+            const theta = Math.sqrt(list.length * Math.PI) * phi;
 
-          return (
-            <BoxMesh
-              key={`${alp}-${index}`}
-              text={alp}
-              position={new Vector3().setFromSphericalCoords(
-                Math.ceil(list.length / (list.length / 15)),
-                phi,
-                theta
-              )}
-              groupPosition={position}
-            />
-          );
-        })}
+            return (
+              <BoxMesh
+                key={`${item.id}-${index}`}
+                id={item.id}
+                text={item.text}
+                position={new Vector3().setFromSphericalCoords(
+                  Math.ceil(list.length / 1),
+                  phi,
+                  theta
+                )}
+                groupPosition={position}
+              />
+            );
+          }
+        )}
       </group>
       {parentPosition && (
         <TrackingLine
@@ -215,9 +219,9 @@ const TrackingLine = (props: {
       const particle = (
         // Trail 컴포넌트를 사용하여 상하구조 관계 흐름을 ui에 표시
         <Trail
-          width={10}
+          width={15}
           length={6}
-          color={new Color(2, 1, 10)}
+          color={new Color(15, 1, 1)}
           attenuation={(t) => t * t}
         >
           <mesh
@@ -252,13 +256,14 @@ const TrackingLine = (props: {
 };
 
 const BoxMesh = (props: {
+  id: string;
   text: string;
   position: Vector3;
   groupPosition: Vector3;
 }) => {
-  const { text, position, groupPosition } = props;
+  const { id, text, position, groupPosition } = props;
   const boxRef = useRef<Mesh>(null);
-  //   const [nodeId, setNodeId] = useRecoilState(nodeIdState);
+  const [nodeId, setNodeId] = useRecoilState(nodeIdState);
 
   useEffect(() => {
     if (boxRef.current) {
@@ -275,10 +280,12 @@ const BoxMesh = (props: {
     }
   }, []);
 
-  const onClickNode = (e: ThreeEvent<MouseEvent>) => {
-    console.log('ONCLICK!!', e);
-    // setNodeId(e.eventObject.name);
+  const onClickNode = () => {
+    setNodeId(id);
   };
+
+  const normal = new Color(1, 1, 4);
+  const active = new Color(4, 1, 1);
 
   return (
     <mesh
@@ -290,11 +297,14 @@ const BoxMesh = (props: {
       receiveShadow
     >
       <sphereGeometry args={[1, 15, 15]} />
-      <Text position={[0, 0, 1]} color="black" fontSize={1} renderOrder={1}>
-        {text}
+      <Text position={[0, 2, 1]} color="white" fontSize={1.5} renderOrder={1}>
+        {text}가나다라마바사
       </Text>
-      {/* <meshStandardMaterial color="white" depthTest={false} transparent /> */}
-      <meshBasicMaterial color={[1, 1, 4]} depthTest={false} transparent />
+      <meshBasicMaterial
+        color={id === nodeId ? active : normal}
+        depthTest={false}
+        transparent
+      />
     </mesh>
   );
 };

@@ -5,7 +5,7 @@ export const groupIdState = atom<number>({
   default: -1,
 });
 
-export const nodeIdState = atom<number>({
+export const nodeIdState = atom<string>({
   key: 'nodeIdState',
-  default: -1,
+  default: '',
 });
