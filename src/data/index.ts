@@ -139,7 +139,7 @@ export const sphereData: SphereDataType[] = [
 export const sphereGroupData = [
   {
     id: 1,
-    coord: [100, 150, 100],
+    coord: [0, 0, 0],
     child: [
       {
         id: '1-1',
@@ -539,7 +539,7 @@ export const sphereGroupData = [
         text: 'a',
       },
     ],
-    parentId: 3,
+    parentId: 1,
   },
   {
     id: 5,
@@ -610,7 +610,7 @@ export const sphereGroupData = [
         text: 'a',
       },
     ],
-    parentId: 4,
+    parentId: 1,
   },
   {
     id: 6,
@@ -621,66 +621,705 @@ export const sphereGroupData = [
         text: 'a',
       },
       {
-        id: '6-2',
+        id: '6-1',
         text: 'a',
       },
       {
-        id: '6-3',
+        id: '6-1',
         text: 'a',
       },
       {
-        id: '6-4',
+        id: '6-1',
         text: 'a',
       },
       {
-        id: '6-5',
+        id: '6-1',
         text: 'a',
       },
       {
-        id: '6-6',
+        id: '6-1',
         text: 'a',
       },
       {
-        id: '6-7',
+        id: '6-1',
         text: 'a',
       },
       {
-        id: '6-8',
+        id: '6-1',
         text: 'a',
       },
       {
-        id: '6-9',
+        id: '6-1',
         text: 'a',
       },
       {
-        id: '6-10',
-        text: 'a',
-      },
-      {
-        id: '6-11',
-        text: 'a',
-      },
-      {
-        id: '6-12',
-        text: 'a',
-      },
-      {
-        id: '6-13',
-        text: 'a',
-      },
-      {
-        id: '6-14',
-        text: 'a',
-      },
-      {
-        id: '6-15',
-        text: 'a',
-      },
-      {
-        id: '6-16',
+        id: '6-1',
         text: 'a',
       },
     ],
-    parentId: 4,
+    parentId: 1,
+  },
+  {
+    id: 7,
+    coord: [-250, 0, -100],
+    child: [
+      {
+        id: '6-1',
+        text: 'a',
+      },
+      {
+        id: '6-1',
+        text: 'a',
+      },
+      {
+        id: '6-1',
+        text: 'a',
+      },
+      {
+        id: '6-1',
+        text: 'a',
+      },
+      {
+        id: '6-1',
+        text: 'a',
+      },
+      {
+        id: '6-1',
+        text: 'a',
+      },
+      {
+        id: '6-1',
+        text: 'a',
+      },
+      {
+        id: '6-1',
+        text: 'a',
+      },
+      {
+        id: '6-1',
+        text: 'a',
+      },
+      {
+        id: '6-1',
+        text: 'a',
+      },
+    ],
+    parentId: 1,
+  },
+  {
+    id: 8,
+    coord: [-250, 0, -100],
+    child: [
+      {
+        id: '6-1',
+        text: 'a',
+      },
+      {
+        id: '6-1',
+        text: 'a',
+      },
+      {
+        id: '6-1',
+        text: 'a',
+      },
+      {
+        id: '6-1',
+        text: 'a',
+      },
+      {
+        id: '6-1',
+        text: 'a',
+      },
+      {
+        id: '6-1',
+        text: 'a',
+      },
+      {
+        id: '6-1',
+        text: 'a',
+      },
+      {
+        id: '6-1',
+        text: 'a',
+      },
+      {
+        id: '6-1',
+        text: 'a',
+      },
+      {
+        id: '6-1',
+        text: 'a',
+      },
+    ],
+    parentId: 1,
+  },
+  {
+    id: 10,
+    coord: [-250, 0, -100],
+    child: [
+      {
+        id: '6-1',
+        text: 'a',
+      },
+      {
+        id: '6-1',
+        text: 'a',
+      },
+      {
+        id: '6-1',
+        text: 'a',
+      },
+      {
+        id: '6-1',
+        text: 'a',
+      },
+      {
+        id: '6-1',
+        text: 'a',
+      },
+      {
+        id: '6-1',
+        text: 'a',
+      },
+      {
+        id: '6-1',
+        text: 'a',
+      },
+      {
+        id: '6-1',
+        text: 'a',
+      },
+      {
+        id: '6-1',
+        text: 'a',
+      },
+      {
+        id: '6-1',
+        text: 'a',
+      },
+    ],
+    parentId: 1,
+  },
+  {
+    id: 11,
+    coord: [-250, 0, -100],
+    child: [
+      {
+        id: '6-1',
+        text: 'a',
+      },
+      {
+        id: '6-1',
+        text: 'a',
+      },
+      {
+        id: '6-1',
+        text: 'a',
+      },
+      {
+        id: '6-1',
+        text: 'a',
+      },
+      {
+        id: '6-1',
+        text: 'a',
+      },
+      {
+        id: '6-1',
+        text: 'a',
+      },
+      {
+        id: '6-1',
+        text: 'a',
+      },
+      {
+        id: '6-1',
+        text: 'a',
+      },
+      {
+        id: '6-1',
+        text: 'a',
+      },
+      {
+        id: '6-1',
+        text: 'a',
+      },
+    ],
+    parentId: 1,
+  },
+  {
+    id: 12,
+    coord: [-250, 0, -100],
+    child: [
+      {
+        id: '6-1',
+        text: 'a',
+      },
+      {
+        id: '6-1',
+        text: 'a',
+      },
+      {
+        id: '6-1',
+        text: 'a',
+      },
+      {
+        id: '6-1',
+        text: 'a',
+      },
+      {
+        id: '6-1',
+        text: 'a',
+      },
+      {
+        id: '6-1',
+        text: 'a',
+      },
+      {
+        id: '6-1',
+        text: 'a',
+      },
+      {
+        id: '6-1',
+        text: 'a',
+      },
+      {
+        id: '6-1',
+        text: 'a',
+      },
+      {
+        id: '6-1',
+        text: 'a',
+      },
+    ],
+    parentId: 1,
+  },
+  {
+    id: 13,
+    coord: [-250, 0, -100],
+    child: [
+      {
+        id: '6-1',
+        text: 'a',
+      },
+      {
+        id: '6-1',
+        text: 'a',
+      },
+      {
+        id: '6-1',
+        text: 'a',
+      },
+      {
+        id: '6-1',
+        text: 'a',
+      },
+      {
+        id: '6-1',
+        text: 'a',
+      },
+      {
+        id: '6-1',
+        text: 'a',
+      },
+      {
+        id: '6-1',
+        text: 'a',
+      },
+      {
+        id: '6-1',
+        text: 'a',
+      },
+      {
+        id: '6-1',
+        text: 'a',
+      },
+      {
+        id: '6-1',
+        text: 'a',
+      },
+    ],
+    parentId: 1,
+  },
+  {
+    id: 14,
+    coord: [-250, 0, -100],
+    child: [
+      {
+        id: '6-1',
+        text: 'a',
+      },
+      {
+        id: '6-1',
+        text: 'a',
+      },
+      {
+        id: '6-1',
+        text: 'a',
+      },
+      {
+        id: '6-1',
+        text: 'a',
+      },
+      {
+        id: '6-1',
+        text: 'a',
+      },
+      {
+        id: '6-1',
+        text: 'a',
+      },
+      {
+        id: '6-1',
+        text: 'a',
+      },
+      {
+        id: '6-1',
+        text: 'a',
+      },
+      {
+        id: '6-1',
+        text: 'a',
+      },
+      {
+        id: '6-1',
+        text: 'a',
+      },
+    ],
+    parentId: 1,
+  },
+  {
+    id: 15,
+    coord: [-250, 0, -100],
+    child: [
+      {
+        id: '6-1',
+        text: 'a',
+      },
+      {
+        id: '6-1',
+        text: 'a',
+      },
+      {
+        id: '6-1',
+        text: 'a',
+      },
+      {
+        id: '6-1',
+        text: 'a',
+      },
+      {
+        id: '6-1',
+        text: 'a',
+      },
+      {
+        id: '6-1',
+        text: 'a',
+      },
+      {
+        id: '6-1',
+        text: 'a',
+      },
+      {
+        id: '6-1',
+        text: 'a',
+      },
+      {
+        id: '6-1',
+        text: 'a',
+      },
+      {
+        id: '6-1',
+        text: 'a',
+      },
+    ],
+    parentId: 1,
+  },
+  {
+    id: 16,
+    coord: [-250, 0, -100],
+    child: [
+      {
+        id: '6-1',
+        text: 'a',
+      },
+      {
+        id: '6-1',
+        text: 'a',
+      },
+      {
+        id: '6-1',
+        text: 'a',
+      },
+      {
+        id: '6-1',
+        text: 'a',
+      },
+      {
+        id: '6-1',
+        text: 'a',
+      },
+      {
+        id: '6-1',
+        text: 'a',
+      },
+      {
+        id: '6-1',
+        text: 'a',
+      },
+      {
+        id: '6-1',
+        text: 'a',
+      },
+      {
+        id: '6-1',
+        text: 'a',
+      },
+      {
+        id: '6-1',
+        text: 'a',
+      },
+    ],
+    parentId: 1,
+  },
+  {
+    id: 17,
+    coord: [-250, 0, -100],
+    child: [
+      {
+        id: '6-1',
+        text: 'a',
+      },
+      {
+        id: '6-1',
+        text: 'a',
+      },
+      {
+        id: '6-1',
+        text: 'a',
+      },
+      {
+        id: '6-1',
+        text: 'a',
+      },
+      {
+        id: '6-1',
+        text: 'a',
+      },
+      {
+        id: '6-1',
+        text: 'a',
+      },
+      {
+        id: '6-1',
+        text: 'a',
+      },
+      {
+        id: '6-1',
+        text: 'a',
+      },
+      {
+        id: '6-1',
+        text: 'a',
+      },
+      {
+        id: '6-1',
+        text: 'a',
+      },
+    ],
+    parentId: 1,
+  },
+  {
+    id: 18,
+    coord: [-250, 0, -100],
+    child: [
+      {
+        id: '6-1',
+        text: 'a',
+      },
+      {
+        id: '6-1',
+        text: 'a',
+      },
+      {
+        id: '6-1',
+        text: 'a',
+      },
+      {
+        id: '6-1',
+        text: 'a',
+      },
+      {
+        id: '6-1',
+        text: 'a',
+      },
+      {
+        id: '6-1',
+        text: 'a',
+      },
+      {
+        id: '6-1',
+        text: 'a',
+      },
+      {
+        id: '6-1',
+        text: 'a',
+      },
+      {
+        id: '6-1',
+        text: 'a',
+      },
+      {
+        id: '6-1',
+        text: 'a',
+      },
+    ],
+    parentId: 1,
+  },
+  {
+    id: 20,
+    coord: [-250, 0, -100],
+    child: [
+      {
+        id: '6-1',
+        text: 'a',
+      },
+      {
+        id: '6-1',
+        text: 'a',
+      },
+      {
+        id: '6-1',
+        text: 'a',
+      },
+      {
+        id: '6-1',
+        text: 'a',
+      },
+      {
+        id: '6-1',
+        text: 'a',
+      },
+      {
+        id: '6-1',
+        text: 'a',
+      },
+      {
+        id: '6-1',
+        text: 'a',
+      },
+      {
+        id: '6-1',
+        text: 'a',
+      },
+      {
+        id: '6-1',
+        text: 'a',
+      },
+      {
+        id: '6-1',
+        text: 'a',
+      },
+    ],
+    parentId: 1,
+  },
+  {
+    id: 21,
+    coord: [-250, 0, -100],
+    child: [
+      {
+        id: '21-1',
+        text: 'a',
+      },
+      {
+        id: '21-1',
+        text: 'a',
+      },
+      {
+        id: '21-1',
+        text: 'a',
+      },
+      {
+        id: '21-1',
+        text: 'a',
+      },
+      {
+        id: '21-1',
+        text: 'a',
+      },
+      {
+        id: '21-1',
+        text: 'a',
+      },
+      {
+        id: '21-1',
+        text: 'a',
+      },
+      {
+        id: '21-1',
+        text: 'a',
+      },
+      {
+        id: '21-1',
+        text: 'a',
+      },
+      {
+        id: '21-1',
+        text: 'a',
+      },
+      {
+        id: '21-1',
+        text: 'a',
+      },
+      {
+        id: '21-1',
+        text: 'a',
+      },
+      {
+        id: '21-1',
+        text: 'a',
+      },
+      {
+        id: '21-1',
+        text: 'a',
+      },
+      {
+        id: '21-1',
+        text: 'a',
+      },
+      {
+        id: '21-1',
+        text: 'a',
+      },
+      {
+        id: '21-1',
+        text: 'a',
+      },
+      {
+        id: '21-1',
+        text: 'a',
+      },
+      {
+        id: '21-1',
+        text: 'a',
+      },
+      {
+        id: '21-1',
+        text: 'a',
+      },
+      {
+        id: '21-1',
+        text: 'a',
+      },
+      {
+        id: '21-1',
+        text: 'a',
+      },
+      {
+        id: '21-1',
+        text: 'a',
+      },
+    ],
+    parentId: 1,
   },
 ];

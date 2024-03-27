@@ -16,6 +16,7 @@ import { Line, OrbitControls, Text, Trail } from '@react-three/drei';
 import { groupIdState, nodeIdState } from '@src/store/example2';
 import type { OrbitControls as OrbitControlsImpl } from 'three-stdlib';
 import { Line2 } from 'three/examples/jsm/Addons.js';
+import { overlapCalcPosition } from '@src/functions';
 
 import { SphereDataType } from '@src/type';
 import { sphereGroupData } from '@src/data';
@@ -42,8 +43,44 @@ const SkyboxWrapper = () => {
   const [groupId, setGroupId] = useRecoilState(groupIdState);
 
   useEffect(() => {
-    setData(sphereGroupData);
-    setGroupId(sphereGroupData[0].id);
+    const sphereData = sphereGroupData.reduce(
+      (result: SphereDataType[], item: SphereDataType, index: number) => {
+        let position = new Vector3(0, 0, 0);
+
+        const parentItem = sphereGroupData.find(
+          (value) => value.id === item.parentId
+        );
+
+        if (index > 0) {
+          const parentPosition = result.find(
+            (value) => value.id === item.parentId
+          )!.coord;
+
+          const phi = Math.acos(
+            -1 + ((2 * index) / parentItem!.child.length) * 2
+          );
+          const theta = Math.sqrt(parentItem!.child.length * 2 * Math.PI) * phi;
+
+          position = overlapCalcPosition(
+            parentPosition,
+            parentItem!.child.length * 2,
+            phi,
+            theta,
+            result,
+            item
+          );
+        }
+
+        return [
+          ...result,
+          { ...item, coord: [position.x, position.y, position.z] },
+        ];
+      },
+      []
+    );
+
+    setData(sphereData);
+    setGroupId(sphereData[0].id);
     loadSkyBox();
   }, []);
 
@@ -151,19 +188,25 @@ const SphereGroup = (props: {
             index: number,
             list: { id: string; text: string }[]
           ) => {
-            const phi = Math.acos(-1 + (2 * index) / list.length);
-            const theta = Math.sqrt(list.length * Math.PI) * phi;
+            const listLength = list.length < 10 ? 10 : list.length;
+
+            // const phi = Math.acos(-1 + (2 * index) / listLength);
+            // const theta = Math.sqrt(listLength * Math.PI) * phi;
+            const phi = Math.acos(-1 + (2 * index) / listLength);
+            const theta = Math.sqrt(listLength * Math.PI) * phi;
+
+            const calcPosition = new Vector3().setFromSphericalCoords(
+              -listLength,
+              phi,
+              theta
+            );
 
             return (
               <BoxMesh
                 key={`${item.id}-${index}`}
                 id={item.id}
                 text={item.text}
-                position={new Vector3().setFromSphericalCoords(
-                  Math.ceil(list.length / 1),
-                  phi,
-                  theta
-                )}
+                position={calcPosition}
                 groupPosition={position}
               />
             );
@@ -298,7 +341,7 @@ const BoxMesh = (props: {
     >
       <sphereGeometry args={[1, 15, 15]} />
       <Text position={[0, 2, 1]} color="white" fontSize={1.5} renderOrder={1}>
-        {text}가나다라마바사
+        {text}
       </Text>
       <meshBasicMaterial
         color={id === nodeId ? active : normal}
