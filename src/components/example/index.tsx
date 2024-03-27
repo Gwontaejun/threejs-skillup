@@ -19,7 +19,7 @@ const Example = () => {
   };
 
   return (
-    <Canvas>
+    <Canvas style={{ height: '100%' }}>
       <OrbitControls
         ref={cameraRef}
         minDistance={10}

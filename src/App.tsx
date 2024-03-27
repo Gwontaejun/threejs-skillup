@@ -4,10 +4,10 @@ import Example2 from './components/example2';
 
 const App = () => {
   return (
-    <div>
+    <>
       {/* <Example /> */}
       <Example2 />
-    </div>
+    </>
   );
 };
 

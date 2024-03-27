@@ -8,9 +8,7 @@ const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLDivElement
 );
 root.render(
-  <div id="root">
-    <RecoilRoot>
-      <App />
-    </RecoilRoot>
-  </div>
+  <RecoilRoot>
+    <App />
+  </RecoilRoot>
 );
