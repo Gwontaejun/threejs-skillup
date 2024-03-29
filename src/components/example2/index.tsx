@@ -63,7 +63,7 @@ const SkyboxWrapper = () => {
 
           position = overlapCalcPosition(
             parentPosition,
-            parentItem!.child.length * 2,
+            parentItem!.child.length * 3,
             phi,
             theta,
             result,
@@ -166,20 +166,18 @@ const SphereGroup = (props: {
         name={`${data.id}`}
         position={position}
         onClick={onClickGroup}
-        renderOrder={2}
+        renderOrder={1}
         castShadow
         receiveShadow
       >
         <mesh castShadow receiveShadow>
           <sphereGeometry args={[5, 15, 15]} />
-          <Text position={[0, 0, 0]} color="white" fontSize={2} renderOrder={1}>
+          <Text position={[0, 7, 0]} color="white" fontSize={4}>
             TEAM
           </Text>
           <meshStandardMaterial
-            transparent
-            opacity={0.9}
             color={groupId === data.id ? 'red' : 'white'}
-            depthTest={false}
+            depthTest
           />
         </mesh>
         {data.child?.map(
@@ -188,7 +186,7 @@ const SphereGroup = (props: {
             index: number,
             list: { id: string; text: string }[]
           ) => {
-            const listLength = list.length < 10 ? 10 : list.length;
+            const listLength = list.length < 30 ? 30 : list.length;
 
             // const phi = Math.acos(-1 + (2 * index) / listLength);
             // const theta = Math.sqrt(listLength * Math.PI) * phi;
@@ -196,7 +194,7 @@ const SphereGroup = (props: {
             const theta = Math.sqrt(listLength * Math.PI) * phi;
 
             const calcPosition = new Vector3().setFromSphericalCoords(
-              -listLength,
+              index % 2 === 0 ? -listLength : listLength,
               phi,
               theta
             );
@@ -291,7 +289,7 @@ const TrackingLine = (props: {
         ref={lineRef}
         points={[...parentPosition, ...position]}
         lineWidth={1}
-        renderOrder={1}
+        renderOrder={2}
       />
       <group ref={groupRef}>{generateParticles(5)}</group>
     </>
@@ -343,11 +341,7 @@ const BoxMesh = (props: {
       <Text position={[0, 2, 1]} color="white" fontSize={1.5} renderOrder={1}>
         {text}
       </Text>
-      <meshBasicMaterial
-        color={id === nodeId ? active : normal}
-        depthTest={false}
-        transparent
-      />
+      <meshBasicMaterial color={id === nodeId ? active : normal} />
     </mesh>
   );
 };
